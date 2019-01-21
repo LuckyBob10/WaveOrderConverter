@@ -4,7 +4,7 @@
 3. Extract to an easy to find location such as `~/Documents/WaveOrderConverter`
 
 # Usage Instructions
-1. Copy the source CSV data into `Documents/WaveOrderConverter`
+1. Copy the source CSV data into `Documents/WaveOrderConverter-master`
 2. Go to `Applications` > `Utilities` > `Terminal`
 3. `cd Documents/WaveOrderConverter`
 4. `python3 name_of_order_converter.py source_data.csv`
