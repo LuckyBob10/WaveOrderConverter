@@ -4,16 +4,16 @@ import os
 import pdb
 
 version = 1.0
-print('PayPal Order Converter v{}'.format(version))
+print('Square Order Converter v{}'.format(version))
 print('---------------------------')
 
 parser = argparse.ArgumentParser(
-    description='Convert PayPal CSV sales data to Wave CSV format'
+    description='Convert Square CSV sales data to Wave CSV format'
 )
 parser.add_argument(
     'input_csv',
     type=argparse.FileType('r'),
-    help='Full path to PayPal input file'
+    help='Full path to Square input file'
 )
 parser.add_argument(
     '-f',
@@ -55,28 +55,29 @@ with args.input_csv as csv_fh:
         if args.verbose:
             print('  - Row data: {}'.format(row))
 
-        values = [
-            float(row['Gross'])
-        ]
-        if float(row['Fee']) != 0:
-            abs(values.append(float(row['Fee']))) * -1
-            if float(row['Shipping and Handling Amount']) > 0:
-                values.append(float(row['Shipping and Handling Amount']))
-        for value in values:
-            date = 'ERROR - UNABLE TO FIND DATE COLUMN IN SOURCE'
-            if 'Date' in row:
-                date = row['Date']
-            desc = row['Type']
-            if row['Name']:
-                desc += ' - {}'.format(row['Name'])
-            csv_outdata.append(
-                {
-                    'date': date,
-                    'amount': value,
-                    'description': desc
-                }
-            )
-            total_value += value
+        value = float(row['Collected'].replace('$', ''))
+        csv_outdata.append(
+            {
+                'date': row['Deposit Date'],
+                'amount': value,
+                'description': row['Type']
+            }
+        )
+        total_value += value
+
+        # Fee column
+        value = float(row['Fees'].replace('$', ''))
+        desc = 'Merchant Fee'
+        if row['Type'] == 'Refund':
+            desc = 'Refund Fee'
+        csv_outdata.append(
+            {
+                'date': row['Deposit Date'],
+                'amount': value,
+                'description': desc
+            }
+        )
+        total_value += value
         row_count_match += 1
 
 
