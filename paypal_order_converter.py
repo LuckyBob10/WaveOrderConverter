@@ -59,8 +59,8 @@ with args.input_csv as csv_fh:
             float(row['Gross'])
         ]
         if float(row['Fee']) != 0:
-            abs(values.append(float(row['Fee']))) * -1
-            if float(row['Shipping and Handling Amount']) > 0:
+            values.append(abs(float(row['Fee'])) * -1)
+            if float(row['Shipping and Handling Amount'] or 0) > 0:
                 values.append(float(row['Shipping and Handling Amount']))
         for value in values:
             date = 'ERROR - UNABLE TO FIND DATE COLUMN IN SOURCE'
