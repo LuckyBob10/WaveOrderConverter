@@ -66,6 +66,8 @@ with args.input_csv as csv_fh:
             date = 'ERROR - UNABLE TO FIND DATE COLUMN IN SOURCE'
             if 'Date' in row:
                 date = row['Date']
+            elif 'date' in row:
+                date = row['date']
             desc = row['Type']
             if row['Name']:
                 desc += ' - {}'.format(row['Name'])
